@@ -25,7 +25,7 @@ def my_plot(index,red,green,blue,ions,E_Limit):
     ProLabels =['','s','p','d'];
     ProIndices =[range(ions[0]-1,ions[1],1),red,green,blue];
     evr = pp.export_vasprun(path = files[0][index]+'/vasprun.xml',elim= E_Limit,joinPathAt=given_data.JoinPathAt)
-    fig = pp.plotly_rgb_lines(path_evr = evr,ions=ProIndices[0],orbs=ProIndices[1:],orblabels=ProLabels[1:],elim=E_Limit,joinPathAt=given_data.JoinPathAt,figsize=[400,320])
+    fig = pp.plotly_rgb_lines(path_evr = evr,ions=ProIndices[0],orbs=ProIndices[1:],orblabels=ProLabels[1:],elim=E_Limit,joinPathAt=given_data.JoinPathAt)
     #============
     #global tab_data;
     # tab_data=[]; #out.clear_output() #reset data output each time
@@ -36,7 +36,7 @@ def my_plot(index,red,green,blue,ions,E_Limit):
     #fig.write_html("Interactive.html")
     #print("Time %s seconds ---" % (time.time() - start_time));start_time = time.time()
     #Handling mouse events
-    pf.click_data(fig=fig)  #Only Required in Mian function
+    #pf.click_data(fig=fig)  #Only Required in Mian function
     #reset_E(None) #Only Required in Mian function
     return fig
 
@@ -65,15 +65,15 @@ blu_sl=dcc.Dropdown(id='bs',persistence=True,placeholder='Select Blue',
     options=[{'label': item, 'value': ind} for item,ind in zip(pro_list,pro_ind)],
     value=[4,5,6,7,8],clearable=False,multi=True) 
 #in start of app. ions are fully calculated.
-N_sl=dcc.RangeSlider(id='ion_sl',min=1,max=variables.NION,value=[1,variables.NION],updatemode='mouseup',tooltip={"visible_always":False},vertical=True,verticalHeight=320)
-E_range=dcc.RangeSlider(id='en_sl',min=-5,max=5,value=[-5,5],updatemode='mouseup',tooltip={"visible_always":False},vertical=True,verticalHeight=320)
+N_sl=dcc.RangeSlider(id='ion_sl',min=1,max=variables.NION,value=[1,variables.NION],updatemode='mouseup',vertical=True,verticalHeight=320)
+E_range=dcc.RangeSlider(id='en_sl',min=-5,max=5,value=[-5,5],updatemode='mouseup',vertical=True,verticalHeight=320)
 sections.append(html.Div( style={"width":"280px","padding":"0.5px"}, children=[red_sl,grn_sl,blu_sl]))
 #sections.append(html.Div(children=[N_sl,E_range]))
 #here you can define your logic on how many times you want to loop
 _out_put = html.Div(id="output")
-graph_=html.Div(className="loadingDiv", children = dcc.Loading(id="loading", loading_state={'is_loading':True,'component_name':'Graph'}, children=dcc.Graph(id='example-graph'),type='circle'))
+graph_=html.Div(className="graphDiv", children = dcc.Loading(className="loading", children=dcc.Graph(className="graph",id='example-graph',config = {'responsive': True}),type='default'))
 
-sections.append(html.Div(style={"display":"flex","padding":"2px"},children=[N_sl,E_range,graph_,_out_put]))
+sections.append(html.Div(style={"display":"flex","padding":"20px"},children=[N_sl,E_range,graph_,_out_put]))
 global prev_t,next_t;
 prev_t=html.Button(id='prev-btn',n_clicks=0, className="prev",style={"position": "fixed", "left": "0px", "top": "0px"},children=u'\u2039') #u'\u2b9c'+
 next_t=html.Button(id='next-btn',n_clicks=0,className="next",style={"position": "fixed", "right": "0px", "top": "0px"},children=u'\u203a') #u'\u2b9e'+
@@ -94,7 +94,7 @@ def receive_data(index):
 sections.append(html.Div(id='data_table')
     
 )
-app.layout = html.Div(style={"position": "absolute", "right": "50px","left":"50px","top":"50px","background":"#a5d6c2ee"},children=sections)
+app.layout = html.Div(style={"position": "absolute", "right": "50px","left":"50px","top":"50px","background":"whitesmoke","padding":"20px"},children=sections)
 
 @app.callback(Output('dd-output-container', 'children'),
     [Input('rs', 'value'),Input('gs', 'value'),Input('bs', 'value')])

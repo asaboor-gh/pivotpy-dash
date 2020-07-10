@@ -1,7 +1,7 @@
 @import url('https://kodhus.com/kodhus-ui/kodhus-0.1.0.min.css');
 body {
   margin: 0;
-  background: #a5d6c2ee;
+  background: #f9fdfcee;
   font-family: sans-serif;
 }
 section {
@@ -142,9 +142,26 @@ td {
   padding: 2px;
   background-color: #1f2c56;
 }
-.loadingDiv {
-  width: 400px;
-  height: 320px;
+.graphDiv {
+  position: relative;
+  width: 40vw;
+  height: 50vh;
+  border: 1px solid white;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+}
+.graph {
+  width: 100%;
+  height : 100%;
+  background:whitesmoke;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+.loading {
+  margin: auto;
 }
 
 
