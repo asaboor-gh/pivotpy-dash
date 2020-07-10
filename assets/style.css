@@ -144,12 +144,12 @@ td {
 }
 .graphDiv {
   position: relative;
-  width: 40vw;
-  height: 50vh;
+  width: 100%;
+  height: inherit;
   border: 1px solid white;
   justify-content: center;
   align-items: center;
-  padding: 50px;
+  padding: 5px;
 }
 .graph {
   width: 100%;
@@ -164,4 +164,45 @@ td {
   margin: auto;
 }
 
-
+.wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-areas: 
+    "title title table table table"
+    "orbs . graph graph graph"
+    "orbs . graph graph graph"
+    ". . graph graph graph";
+  padding: 10px 10px;
+  gap: 10px;
+}
+@media (max-width: 700px) {
+  .wrap {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'title'
+      'orbs'
+      'graph'
+      'table';
+  }
+}
+.wrap > div {
+  background-color:#f9f9f9;
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px lightgrey;
+  border: 1px solid white;
+}
+.result_table {
+  grid-area: table;
+}
+.orbitals {
+  grid-area: orbs;
+}
+.gr_sl {
+grid-area: graph;
+}
+.logo {
+  grid-area: title;
+  margin: auto;
+  color: #1f2c56;
+}

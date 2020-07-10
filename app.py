@@ -39,18 +39,31 @@ def my_plot(index,red,green,blue,ions,E_Limit):
     #pf.click_data(fig=fig)  #Only Required in Mian function
     #reset_E(None) #Only Required in Mian function
     return fig
+def receive_data(index):
+    df=pd.read_csv(files[0][index]+'/Result.txt',sep='\t',header=None).dropna(axis=1).dropna(axis=0)
+    return html.Div(children=[
+        html.Table([
+            html.Tr([html.Th('V('+u'\u212B\u00B3'+')') if 'V' in word else html.Th(word+'('+u'\u212B'+')') for word in df[0][:4]]),
+            html.Tr([html.Td(val) for val in df[1][:4]])
+            ]),
+        html.P(),
+        html.Table([
+            html.Tr([html.Th([html.B('E'),html.Sub('gap'),html.B('(eV)')]) if 'gap' in word else html.Th([html.B('Δ'),html.Sub('SO'),html.B('(eV)')]) if '\Delta' in word else html.Th([html.B('E'),html.Sub('core'),html.B('(eV)')]) if 'core' in word else html.Th(word+'(eV)') for word in df[0][4:]]),
+            html.Tr([html.Td(val) for val in df[1][4:]]) ]) ])
 
 app = dash.Dash()
 sections=[]
 sections.append(html.Div(className='AppHeader',id="drop1",children=[html.Div(className='CenHeader',children=html.P('Directory')),
-    dcc.Dropdown( id="drop1-1",options=[{'label':files[0][i].split('III-V/')[1],'value' :i} for i in range(len(files[0]))],
+    dcc.Dropdown(className='CenHeader', id="drop1-1",options=[{'label':files[0][i].split('III-V/')[1],'value' :i} for i in range(len(files[0]))],
     value=0,clearable=False),
     html.Div(className='CenHeader',id="drop1-2",children=[html.P('1/'+str(len(files[0])))])
 
 ]))
+sections.append(html.Div(className="logo",style={"box-shadow":"none","border":"none","background":"none"},children=[html.H1('Pivotpy-Dash')]))
 sections.append(html.Div(id='progressbar',children=html.Div(
 style={"background":"#1f2c56","position":"fixed","width":str(1/len(files[0])*100)+"vw","height":"4px","left":"0px","right":"0px","top":"0px","z-index":"99999"})))
 sections.append(html.Div(id="dd-output-container"))
+sections.append(html.Div(className="result_table",id='data_table'))
 #B0_py      B0_pz      B0_px      B0_dxy      B0_dyz      B0_dz2      B0_dxz      B0_x2-y2
 pro_list=['s','py','pz','px','dxy','dyz','dz2','dxz','dx2-y2']
 pro_ind=[0,1,2,3,4,5,6,7,8]
@@ -64,37 +77,28 @@ grn_sl=dcc.Dropdown(id='gs',persistence=True,placeholder='Select Green',
 blu_sl=dcc.Dropdown(id='bs',persistence=True,placeholder='Select Blue',
     options=[{'label': item, 'value': ind} for item,ind in zip(pro_list,pro_ind)],
     value=[4,5,6,7,8],clearable=False,multi=True) 
+ions_sl=dcc.Dropdown(id='ions',persistence=True,placeholder='Select IONS',
+    options=[{'label': item, 'value': ind} for item,ind in zip(pro_list,pro_ind)],
+    value=[4,5,6,7,8],clearable=False,multi=True) 
 #in start of app. ions are fully calculated.
-N_sl=dcc.RangeSlider(id='ion_sl',min=1,max=variables.NION,value=[1,variables.NION],updatemode='mouseup',vertical=True,verticalHeight=320)
-E_range=dcc.RangeSlider(id='en_sl',min=-5,max=5,value=[-5,5],updatemode='mouseup',vertical=True,verticalHeight=320)
-sections.append(html.Div( style={"width":"280px","padding":"0.5px"}, children=[red_sl,grn_sl,blu_sl]))
+N_sl=dcc.RangeSlider(id='ion_sl',min=1,max=variables.NION,value=[1,variables.NION],updatemode='mouseup',vertical=True)
+E_range=dcc.RangeSlider(id='en_sl',min=-5,max=5,value=[-5,5],updatemode='mouseup',vertical=True)
+sections.append(html.Div(className = "orbitals", children=[html.H6('Select Orbitals'),red_sl,grn_sl,blu_sl,html.H6('Select Sites'),ions_sl]))
 #sections.append(html.Div(children=[N_sl,E_range]))
 #here you can define your logic on how many times you want to loop
 _out_put = html.Div(id="output")
 graph_=html.Div(className="graphDiv", children = dcc.Loading(className="loading", children=dcc.Graph(className="graph",id='example-graph',config = {'responsive': True}),type='default'))
 
-sections.append(html.Div(style={"display":"flex","padding":"20px"},children=[N_sl,E_range,graph_,_out_put]))
+sections.append(html.Div(className="gr_sl",style={"display":"flex","padding":"20px"},children=[N_sl,E_range,graph_,_out_put]))
 global prev_t,next_t;
 prev_t=html.Button(id='prev-btn',n_clicks=0, className="prev",style={"position": "fixed", "left": "0px", "top": "0px"},children=u'\u2039') #u'\u2b9c'+
 next_t=html.Button(id='next-btn',n_clicks=0,className="next",style={"position": "fixed", "right": "0px", "top": "0px"},children=u'\u203a') #u'\u2b9e'+
 
 sections.append(prev_t)
 sections.append(next_t)
-def receive_data(index):
-    df=pd.read_csv(files[0][index]+'/Result.txt',sep='\t',header=None).dropna(axis=1).dropna(axis=0)
-    return html.Div(children=[
-        html.Table([
-            html.Tr([html.Th('V('+u'\u212B\u00B3'+')') if 'V' in word else html.Th(word+'('+u'\u212B'+')') for word in df[0][:4]]),
-            html.Tr([html.Td(val) for val in df[1][:4]])
-            ]),
-        html.P(),
-        html.Table([
-            html.Tr([html.Th([html.B('E'),html.Sub('gap'),html.B('(eV)')]) if 'gap' in word else html.Th([html.B('Δ'),html.Sub('SO'),html.B('(eV)')]) if '\Delta' in word else html.Th([html.B('E'),html.Sub('core'),html.B('(eV)')]) if 'core' in word else html.Th(word+'(eV)') for word in df[0][4:]]),
-            html.Tr([html.Td(val) for val in df[1][4:]]) ]) ])
-sections.append(html.Div(id='data_table')
-    
-)
-app.layout = html.Div(style={"position": "absolute", "right": "50px","left":"50px","top":"50px","background":"whitesmoke","padding":"20px"},children=sections)
+
+
+app.layout = html.Div(className="wrap",style={"position": "absolute", "right": "50px","left":"50px","top":"60px","background":"whitesmoke"},children=sections)
 
 @app.callback(Output('dd-output-container', 'children'),
     [Input('rs', 'value'),Input('gs', 'value'),Input('bs', 'value')])
