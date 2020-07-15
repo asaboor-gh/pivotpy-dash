@@ -20,6 +20,32 @@ files=sf.select_dirs(path=given_data.ParentFolder, include=given_data.IncludeFol
 tickIndices =given_data.TickIndices;
 ticklabels =given_data.TickLabels;
 
+import json, numpy,pivotpy
+
+class RoundTripEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, numpy.ndarray):
+            return {
+                "_type": "ndarray",
+                "value": obj.tolist()
+            }
+        elif isinstance(obj, pivotpy.vr_parser.Dic2Dot):
+            return {
+                "_type": "Dic2Dot",
+                "value": obj
+            }
+        if isinstance(obj, numpy.integer):
+            return int(obj)
+        elif isinstance(obj, numpy.floating):
+            return float(obj)
+        elif isinstance(obj,range):
+            value = list(obj)
+            return {
+                "_type" : "range",
+                "value" : [value[0],value[-1]+1]
+            }
+        return super(RoundTripEncoder, self).default(obj)
+
 #Plot Function.
 def my_plot(index,red,green,blue,ions,E_Limit):
     ProLabels =['','s','p','d'];
@@ -86,10 +112,11 @@ E_range=dcc.RangeSlider(id='en_sl',min=-5,max=5,value=[-5,5],updatemode='mouseup
 sections.append(html.Div(className = "orbitals", children=[html.H6('Select Orbitals'),red_sl,grn_sl,blu_sl,html.H6('Select Sites'),ions_sl]))
 #sections.append(html.Div(children=[N_sl,E_range]))
 #here you can define your logic on how many times you want to loop
+store=dcc.Store(id="store")
 _out_put = html.Div(id="output")
 graph_=html.Div(className="graphDiv", children = dcc.Loading(className="loading", children=dcc.Graph(className="graph",id='example-graph',config = {'responsive': True}),type='default'))
 
-sections.append(html.Div(className="gr_sl",style={"display":"flex","padding":"20px"},children=[N_sl,E_range,graph_,_out_put]))
+sections.append(html.Div(className="gr_sl",style={"display":"flex","padding":"20px"},children=[N_sl,E_range,graph_,_out_put,store]))
 global prev_t,next_t;
 prev_t=html.Button(id='prev-btn',n_clicks=0, className="prev",style={"position": "fixed", "left": "0px", "top": "0px"},children=u'\u2039') #u'\u2b9c'+
 next_t=html.Button(id='next-btn',n_clicks=0,className="next",style={"position": "fixed", "right": "0px", "top": "0px"},children=u'\u203a') #u'\u2b9e'+
@@ -143,25 +170,43 @@ def update_dir(cl_1,cl_2,st_1,elim,ion):
     mark_en={} #Just to make clear without click.
     for point in range(int(minE),int(maxE)+1,2):
         mark_en.update({point: str(point)})
+    print("E_min: {}".format(minE))
     return count_dir,maxION,ion_range,marks,minE,maxE,[lower,upper],mark_en
 
+
+@app.callback(Output('store', 'data'),[Input('drop1-1', 'value'),Input('en_sl','value')])
+def export_to_store(index,elim):
+    import pivotpy as pp 
+    vr = pp.export_vasprun(path=files[0][index]+'/vasprun.xml',elim=elim,joinPathAt=given_data.JoinPathAt)
+    print(vr.keys())
+    vr.pop('xml',None)
+    data=vr
+    s=json.dumps(data, cls=RoundTripEncoder,indent=2)
+    return s
 
 @app.callback(
     [Output('example-graph', 'figure'),Output('drop1-2', 'children'),Output('progressbar', 'children'),Output('data_table','children')],
     [Input('drop1-1', 'value'),Input('rs', 'value'),Input('gs', 'value'),Input('bs', 'value'),
-    Input('ion_sl','value'),Input('en_sl','value')])
-def update_fig(value,r_pro,g_pro,b_pro,ions,elim):
-    return my_plot(index=value,red=r_pro,green=g_pro,blue=b_pro,ions=ions,E_Limit=elim),\
+    Input('ion_sl','value'),Input('en_sl','value'),Input('store','data')])
+def update_fig(value,r_pro,g_pro,b_pro,ions,elim,data):
+    print(value)
+    import pivotpy as pp
+    import plotly.graph_objs as go
+    #my_plot(index=value,red=r_pro,green=g_pro,blue=b_pro,ions=ions,E_Limit=elim),\
+    return  go.Figure(),\
             html.P(str(value+1)+'/'+str(len(files[0]))),\
             html.Div(style={"background":"#1f2c56","position":"fixed","width":str((value+1)/len(files[0])*100)+"vw","height":"4px","left":"0px","right":"0px","top":"0px","z-index":"99999"}),\
             receive_data(index=value)
 @app.callback(
     Output('output', 'children'),
-    [Input('example-graph', 'clickData')])
-def display_click_data(clickData):
-    print("X : {}".format(clickData['points'][0]['x']))
-    print("Y : {}".format(clickData['points'][0]['y']))
-    return html.H3("X : {}, Y : {}".format(clickData['points'][0]['x'],clickData['points'][0]['y']+variables.E_Fermi))
+    [Input('example-graph', 'clickData'),Input('store','data')])
+def display_click_data(clickData,data):
+    json.loads(data)
+    #print("Stored : {}".format(data))
+    if(clickData):
+        print("X : {}".format(clickData['points'][0]['x']))
+        print("Y : {}".format(clickData['points'][0]['y']))
+        return html.H3("X : {}, Y : {}".format(clickData['points'][0]['x'],clickData['points'][0]['y']+variables.E_Fermi))
 
 if __name__ == '__main__':
     app.run_server(debug=False)

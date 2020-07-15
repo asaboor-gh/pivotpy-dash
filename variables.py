@@ -1,5 +1,5 @@
-SYSTEM, NKPTS, NBANDS, NFILLED, TypeION=['InSb[0.98]', 120, 42, 26, 2]; 
-NION, nField_Projection, E_Fermi, ISPIN=[6, 9, 4.3203, 1]; 
-ElemIndex=[0, 3, 6]; ElemName=['In', 'Sb']; E_core=-7.949; E_top=10.5218;
-basis=[[4.51709681,0.00000000,0.00000000],[-2.25854840,3.91192059,0.00000000],[0.00000000,0.00000000,11.41955467]];
-volume= 201.78951478;
+SYSTEM, NKPTS, NBANDS, NFILLED, TypeION=['InSb', 120, 21, 13, 2]; 
+NION, nField_Projection, E_Fermi, ISPIN=[6, 9, 3.7932, 1]; 
+ElemIndex=[0, 3, 6]; ElemName=['In', 'Sb']; E_core=-8.0542; E_top=10.1556;
+basis=[[4.60928246,0.00000000,0.00000000],[-2.30464123,3.99175570,0.00000000],[0.00000000,0.00000000,11.27612742]];
+volume= 207.47092900;
