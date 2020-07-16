@@ -20,37 +20,11 @@ files=sf.select_dirs(path=given_data.ParentFolder, include=given_data.IncludeFol
 tickIndices =given_data.TickIndices;
 ticklabels =given_data.TickLabels;
 
-import json, numpy,pivotpy
-
-class RoundTripEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, numpy.ndarray):
-            return {
-                "_type": "ndarray",
-                "value": obj.tolist()
-            }
-        elif isinstance(obj, pivotpy.vr_parser.Dic2Dot):
-            return {
-                "_type": "Dic2Dot",
-                "value": obj
-            }
-        if isinstance(obj, numpy.integer):
-            return int(obj)
-        elif isinstance(obj, numpy.floating):
-            return float(obj)
-        elif isinstance(obj,range):
-            value = list(obj)
-            return {
-                "_type" : "range",
-                "value" : [value[0],value[-1]+1]
-            }
-        return super(RoundTripEncoder, self).default(obj)
 
 #Plot Function.
-def my_plot(index,red,green,blue,ions,E_Limit):
+def my_plot(evr,red,green,blue,ions,E_Limit):
     ProLabels =['','s','p','d'];
     ProIndices =[range(ions[0]-1,ions[1],1),red,green,blue];
-    evr = pp.export_vasprun(path = files[0][index]+'/vasprun.xml',elim= E_Limit,joinPathAt=given_data.JoinPathAt)
     fig = pp.plotly_rgb_lines(path_evr = evr,ions=ProIndices[0],orbs=ProIndices[1:],orblabels=ProLabels[1:],elim=E_Limit,joinPathAt=given_data.JoinPathAt)
     #============
     #global tab_data;
@@ -174,14 +148,13 @@ def update_dir(cl_1,cl_2,st_1,elim,ion):
     return count_dir,maxION,ion_range,marks,minE,maxE,[lower,upper],mark_en
 
 
-@app.callback(Output('store', 'data'),[Input('drop1-1', 'value'),Input('en_sl','value')])
-def export_to_store(index,elim):
+@app.callback(Output('store', 'data'),[Input('drop1-1', 'value')])
+def export_to_store(index):
     import pivotpy as pp 
-    vr = pp.export_vasprun(path=files[0][index]+'/vasprun.xml',elim=elim,joinPathAt=given_data.JoinPathAt)
+    vr = pp.export_vasprun(path=files[0][index]+'/vasprun.xml',joinPathAt=given_data.JoinPathAt)
     print(vr.keys())
     vr.pop('xml',None)
-    data=vr
-    s=json.dumps(data, cls=RoundTripEncoder,indent=2)
+    s=json.dumps(vr, cls=pp.EncodeFromNumpy)
     return s
 
 @app.callback(
@@ -189,11 +162,11 @@ def export_to_store(index,elim):
     [Input('drop1-1', 'value'),Input('rs', 'value'),Input('gs', 'value'),Input('bs', 'value'),
     Input('ion_sl','value'),Input('en_sl','value'),Input('store','data')])
 def update_fig(value,r_pro,g_pro,b_pro,ions,elim,data):
-    print(value)
     import pivotpy as pp
+    s2 = json.loads(data,cls= pp.DecodeToNumpy)
+    evr = pp.make_dot_dict(s2)
     import plotly.graph_objs as go
-    #my_plot(index=value,red=r_pro,green=g_pro,blue=b_pro,ions=ions,E_Limit=elim),\
-    return  go.Figure(),\
+    return my_plot(evr=evr,red=r_pro,green=g_pro,blue=b_pro,ions=ions,E_Limit=elim),\
             html.P(str(value+1)+'/'+str(len(files[0]))),\
             html.Div(style={"background":"#1f2c56","position":"fixed","width":str((value+1)/len(files[0])*100)+"vw","height":"4px","left":"0px","right":"0px","top":"0px","z-index":"99999"}),\
             receive_data(index=value)
@@ -206,7 +179,7 @@ def display_click_data(clickData,data):
     if(clickData):
         print("X : {}".format(clickData['points'][0]['x']))
         print("Y : {}".format(clickData['points'][0]['y']))
-        return html.H3("X : {}, Y : {}".format(clickData['points'][0]['x'],clickData['points'][0]['y']+variables.E_Fermi))
+        return html.P("X : {}, Y : {}".format(clickData['points'][0]['x'],clickData['points'][0]['y']+variables.E_Fermi))
 
 if __name__ == '__main__':
     app.run_server(debug=False)
