@@ -54,7 +54,7 @@ def receive_data(index):
 app = dash.Dash()
 sections=[]
 sections.append(html.Div(className='AppHeader',id="drop1",children=[html.Div(className='CenHeader',children=html.P('Directory')),
-    dcc.Dropdown(className='CenHeader', id="drop1-1",options=[{'label':files[0][i].split('III-V/')[1],'value' :i} for i in range(len(files[0]))],
+    dcc.Dropdown(className='CenHeader', id="drop1-1",persistence=True,options=[{'label':files[0][i],'value' :i} for i in range(len(files[0]))],
     value=0,clearable=False),
     html.Div(className='CenHeader',id="drop1-2",children=[html.P('1/'+str(len(files[0])))])
 
@@ -77,12 +77,12 @@ grn_sl=dcc.Dropdown(id='gs',persistence=True,placeholder='Select Green',
 blu_sl=dcc.Dropdown(id='bs',persistence=True,placeholder='Select Blue',
     options=[{'label': item, 'value': ind} for item,ind in zip(pro_list,pro_ind)],
     value=[4,5,6,7,8],clearable=False,multi=True) 
-ions_sl=dcc.Dropdown(id='ions',persistence=True,placeholder='Select IONS',
+ions_sl=dcc.Dropdown(id='ions',persistence=True, placeholder='Select IONS',
     options=[{'label': item, 'value': ind} for item,ind in zip(pro_list,pro_ind)],
     value=[4,5,6,7,8],clearable=False,multi=True) 
 #in start of app. ions are fully calculated.
-N_sl=dcc.RangeSlider(id='ion_sl',min=1,max=variables.NION,value=[1,variables.NION],updatemode='mouseup',vertical=True)
-E_range=dcc.RangeSlider(id='en_sl',min=-5,max=5,value=[-5,5],updatemode='mouseup',vertical=True)
+N_sl=dcc.RangeSlider(id='ion_sl',persistence=True,min=1,max=variables.NION,value=[1,variables.NION],updatemode='mouseup',vertical=True)
+E_range=dcc.RangeSlider(id='en_sl',persistence=True,min=-5,max=5,value=[-5,5],updatemode='mouseup',vertical=True)
 sections.append(html.Div(className = "orbitals", children=[html.H6('Select Orbitals'),red_sl,grn_sl,blu_sl,html.H6('Select Sites'),ions_sl]))
 #sections.append(html.Div(children=[N_sl,E_range]))
 #here you can define your logic on how many times you want to loop

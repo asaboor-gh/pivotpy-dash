@@ -61,8 +61,8 @@ def copy_here(path):
 #update ions and energy limit with new folder
 def get_limits(path):
     vbs=copy_here(path)
-    minE=np.floor(vbs.E_core-vbs.E_Fermi)
-    maxE=np.ceil(vbs.E_top-vbs.E_Fermi)
+    minE=-5#np.floor(vbs.E_core-vbs.E_Fermi)
+    maxE=5#np.ceil(vbs.E_top-vbs.E_Fermi)
     marks={}; 
     for i in range(len(vbs.ElemName)):
         if(vbs.ElemIndex[i+1]-vbs.ElemIndex[i]>2):
