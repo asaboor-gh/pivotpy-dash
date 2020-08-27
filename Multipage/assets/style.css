@@ -1,0 +1,208 @@
+@import url('https://kodhus.com/kodhus-ui/kodhus-0.1.0.min.css');
+body {
+  margin: 0;
+  background: #f9fdfcee;
+  font-family: sans-serif;
+}
+section {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ccc;
+  position: relative;
+}
+main {
+  height: 100vh;
+  overflow: hidden;
+}
+section:nth-child(2) {
+  background: blueviolet;
+}
+section:nth-child(3) {
+  background: yellowgreen;
+}
+.nav {
+  position: relative;
+
+}
+.text {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  opacity: 0;
+  transform: translateY(100px);
+  transition: all 0.5s 0.5s;
+}
+.text.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+button {
+  width: 50px;
+  height: 100vh;
+  padding-bottom: 100px;
+  z-index: 9999;
+  border: none;
+  padding: 0 0;
+  margin: none;
+  text-decoration: none;
+  background: none;
+  color: #1f2c56;
+  font-family: sans-serif;
+  font-size: 100px;
+  cursor: pointer;
+  text-align: center;
+  text-justify: auto;
+  transition: background 250ms ease-in-out, 
+              transform 150ms ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+button:hover,button:focus {
+  background:none;
+  color: #FF0000;
+  outline: none;
+}
+
+button:active {
+  transform: scale(0.5);
+}
+
+
+::-webkit-scrollbar {
+  display: none;
+  }
+
+.AppHeader{
+  position:fixed;
+  z-index:99999;
+  left:0px;
+  right:0px;
+  top:4px;
+  display:inline-grid;
+  grid-template-columns: 2fr 17fr 1fr;
+  width:100%; 
+  padding: 5px 5px 5px 5px;
+  grid-gap:10px;
+  background:#ccc;
+  align-items: stretch;
+}
+.CenHeader{
+  margin: auto;
+  text-align: center;
+}
+.CenHeader p{
+  margin: auto;
+}
+
+
+#rs .Select-value-label,#gs .Select-value-label,#bs .Select-value-label{
+  color: white;
+  background-color: #1f2c56;
+}
+
+#rs .Select-multi-value-wrapper,#rs .Select-menu-outer, #rs .Select-placeholder,#rs .Select-control{
+  background-color: #ff0000e5;
+  color: white
+}
+#gs .Select-multi-value-wrapper,#gs .Select-menu-outer,#gs .Select-placeholder,#gs .Select-control{
+  background-color: #00ff62e3;
+  color: black;
+}
+
+#bs .Select-multi-value-wrapper,#bs .Select-menu-outer,#bs .Select-placeholder,#bs .Select-control{
+  background-color: #0400ffe0;
+  color: white
+}
+
+.Select-rangeslider {
+  background-color: #1f2c56;
+}
+
+table, td, th {
+  border: 1px solid black;
+  text-align: center;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+th {
+  background-color: rgb(169, 248, 205);
+}
+td {
+  background-color: rgb(255, 255, 255);
+}
+#data_table {
+  padding: 2px;
+  background-color: #1f2c56;
+}
+.graphDiv {
+  position: relative;
+  width: 100%;
+  height: inherit;
+  border: 1px solid white;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+}
+.graph {
+  width: 100%;
+  height : 100%;
+  background:whitesmoke;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+.loading {
+  margin: auto;
+}
+
+.wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-areas: 
+    "title title table table table"
+    "orbs . graph graph graph"
+    "orbs . graph graph graph"
+    ". . graph graph graph";
+  padding: 10px 10px;
+  gap: 10px;
+}
+@media (max-width: 700px) {
+  .wrap {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'title'
+      'orbs'
+      'graph'
+      'table';
+  }
+}
+.wrap > div {
+  background-color:#f9f9f9;
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px lightgrey;
+  border: 1px solid white;
+}
+.result_table {
+  grid-area: table;
+}
+.orbitals {
+  grid-area: orbs;
+}
+.gr_sl {
+grid-area: graph;
+}
+.logo {
+  grid-area: title;
+  margin: auto;
+  color: #1f2c56;
+}
