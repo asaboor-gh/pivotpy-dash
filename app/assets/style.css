@@ -77,12 +77,28 @@ button:active {
   display: none;
   }
 
+.Navigation{
+  position:fixed;
+  z-index:99999;
+  left:0px;
+  right:0px;
+  top:0px;
+  height: 50px;
+  display:inline-grid;
+  grid-template-columns: 3fr 2fr;
+  width:100%; 
+  padding: 5px 5px 5px 5px;
+  grid-gap:10px;
+  background:#ccc;
+  align-items: stretch;
+}
 .AppHeader{
   position:fixed;
   z-index:99999;
   left:0px;
   right:0px;
-  top:4px;
+  top:50px;
+  height: 50px;
   display:inline-grid;
   grid-template-columns: 2fr 17fr 1fr;
   width:100%; 
