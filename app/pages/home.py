@@ -18,8 +18,9 @@ layout = html.Div([
     dcc.Markdown("""
                 #### How to Proceed 
                 On this page you can filter files/directories to work with. 
-                Fill out below input and click on `Apply Changes` button, 
+                Fill out below input and click on button at the end, 
                 once you get a green success message, you are good to proceed through your project and switch between tabs.
+                [Read More](https://github.com/massgh/pivotpy-dash/blob/master/README.md)
                  """),
     html.Div([
         html.H6("Litral Path to Project Folder"),
@@ -37,8 +38,7 @@ layout = html.Div([
             html.Button("Apply Changes",id='submit',n_clicks=0,className='btn-simple'),
             html.Div(id='err-div',className="CenHeader",style={"color":"red"})
             ],style={"display":"flex","padding":"20px 10px","align-items": "flex-end"}),
-    html.Div([html.Marquee(html.H6(intro_str,style={'color':'hotpink'}))]),
-    dcc.Markdown('[![](c/Users/mass_/Downloads/GitHub-Mark/GitHub-Mark/PNG/GitHub-Mark-120px-plus.png)](https://github.com/massgh)')
+    html.Div([html.Marquee(html.H6(intro_str,style={'color':'hotpink'}))])
     ],className='home-page')
 
 @app.callback([Output('dd','options'),Output('err-div','children')],
