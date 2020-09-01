@@ -37,7 +37,8 @@ layout = html.Div([
             html.Button("Apply Changes",id='submit',n_clicks=0,className='btn-simple'),
             html.Div(id='err-div',className="CenHeader",style={"color":"red"})
             ],style={"display":"flex","padding":"20px 10px","align-items": "flex-end"}),
-    html.Div([html.Marquee(html.H6(intro_str,style={'color':'hotpink'}))])
+    html.Div([html.Marquee(html.H6(intro_str,style={'color':'hotpink'}))]),
+    dcc.Markdown('[![](c/Users/mass_/Downloads/GitHub-Mark/GitHub-Mark/PNG/GitHub-Mark-120px-plus.png)](https://github.com/massgh)')
     ],className='home-page')
 
 @app.callback([Output('dd','options'),Output('err-div','children')],
