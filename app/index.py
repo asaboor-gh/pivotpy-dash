@@ -5,7 +5,7 @@ import sys,os,dash
 from dash.dash import no_update
 import pivotpy as pp
 from app import app
-from pages import bands, dos, home, fermi, input
+from pages import bands, dos, home, fermi, input, locpot
 
 #path = os.getcwd()
 #items = pp.get_child_items(path=path,include=[],dirsOnly=True)
@@ -21,6 +21,7 @@ menu_items = [
             html.Div([dcc.Link('Bands',className='CenHeader', href='/pages/bands')],id='bands'),
             html.Div([dcc.Link('DOS',className='CenHeader', href='/pages/dos')],id='dos'),
             html.Div([dcc.Link('Fermi Surface',className='CenHeader', href='/pages/fermi')],id='fermi'),
+            html.Div([dcc.Link('LOCPOT',className='CenHeader', href='/pages/locpot')],id='locpot'),
             html.Div([dcc.Link('Input',className='CenHeader', href='/pages/input')],id='input')
             ]
 navigation.children.append(
@@ -107,21 +108,22 @@ def update_file_index(next,prev,options,value):
                Output('bands','style'),
                Output('dos','style'),
                Output('fermi','style'),
+               Output('locpot','style'),
                Output('input','style')],
               [Input('url', 'pathname')])
 def display_page(pathname):
-    if pathname == '/pages/home':
-        return home.layout,active_style,inactive_style,inactive_style,inactive_style,inactive_style
+    if pathname == '/pages/home' or pathname == '/':
+        return home.layout,active_style,inactive_style,inactive_style,inactive_style,inactive_style,inactive_style
     elif pathname == '/pages/bands':
-        return bands.layout,inactive_style,active_style,inactive_style,inactive_style,inactive_style
+        return bands.layout,inactive_style,active_style,inactive_style,inactive_style,inactive_style, inactive_style
     elif pathname == '/pages/dos':
-        return dos.layout, inactive_style,inactive_style,active_style,inactive_style,inactive_style
+        return dos.layout, inactive_style,inactive_style,active_style,inactive_style,inactive_style, inactive_style
     elif pathname == '/pages/fermi':
-        return fermi.layout,inactive_style,inactive_style,inactive_style,active_style,inactive_style
+        return fermi.layout,inactive_style,inactive_style,inactive_style,active_style,inactive_style,inactive_style
+    elif pathname == '/pages/locpot':
+        return input.layout,inactive_style,inactive_style,inactive_style,inactive_style,active_style,inactive_style
     elif pathname == '/pages/input':
-        return input.layout,inactive_style,inactive_style,inactive_style,inactive_style,active_style
-    else:
-        return home.layout
+        return input.layout,inactive_style,inactive_style,inactive_style,inactive_style,inactive_style, active_style
     
 if len(sys.argv) > 1:
     port = sys.argv[1]
