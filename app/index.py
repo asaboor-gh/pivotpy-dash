@@ -6,6 +6,7 @@ from dash.dash import no_update
 import pivotpy as pp
 from app import app
 from pages import bands, dos, home, fermi, input, locpot
+from pages.re_usable import graph_config
 
 #path = os.getcwd()
 #items = pp.get_child_items(path=path,include=[],dirsOnly=True)
@@ -59,7 +60,6 @@ app.layout = html.Div([
                         prev_t,
                         next_t,
                         html.Div(id = 'display-page',className='content',children=[])
-                        
                     ])
 
 # Changing values with button
@@ -129,5 +129,8 @@ if len(sys.argv) > 1:
     port = sys.argv[1]
 else:
     port = 8050
+    
+
+#==========================
 if __name__ == '__main__':
     app.run_server(debug=True,port=port)

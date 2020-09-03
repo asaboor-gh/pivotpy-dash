@@ -4,10 +4,6 @@ import pivotpy as pp
 import dash_core_components as dcc
 import dash_html_components as html
 
-@lru_cache
-def load_vasprun(path):
-    return pp.export_vasprun(path)
-
 
 sections=[]
 
