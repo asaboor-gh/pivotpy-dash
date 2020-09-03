@@ -128,7 +128,7 @@ button:active {
   top:50px;
   height: 50px;
   display:inline-grid;
-  grid-template-columns: 2fr 17fr 1fr;
+  grid-template-columns: 2fr 17fr 3fr;
   width:100%; 
   padding: 5px 5px 5px 5px;
   grid-gap:10px;
@@ -138,6 +138,7 @@ button:active {
 .CenHeader{
   margin: auto;
   text-align: center;
+  white-space: nowrap;
 }
 .CenHeader p{
   margin: auto;

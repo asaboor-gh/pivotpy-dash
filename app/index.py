@@ -68,7 +68,8 @@ app.layout = html.Div([
 def update_count(value,options):
     if options != None:
         values = [opt['value'] for opt in options]
-        return html.H6("{}/{}".format(values.index(value)+1,len(options))), html.Div(
+        size = pp.get_file_size(value)
+        return html.H6("{}: {}/{}".format(size,values.index(value)+1,len(options))), html.Div(
             style={"width":"{}vw".format((100*(values.index(value)+1))/len(options)),"left":"0px","right":"0px"})
     else:
         return no_update,no_update
