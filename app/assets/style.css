@@ -150,8 +150,20 @@ button:active {
   background-color: #1f2c56;
 }
 
-#rs .Select-multi-value-wrapper,#rs .Select-menu-outer, #rs .Select-placeholder,#rs .Select-control{
-  background-color: #ff0000e5;
+#rs .Select-control,#rs .Select-multi-value-wrapper,#rs .Select-placeholder,#rs .Select-menu-outer{
+  background-color: #ec0a0a;
+  color: white
+}
+#red .Select-value-label {
+  background-color: #ee0505;
+  color: white
+}
+#green .Select-value-label {
+  background-color: #06b92d;
+  color: white
+}
+#blue .Select-value-label {
+  background-color: #0509eb;
   color: white
 }
 #gs .Select-multi-value-wrapper,#gs .Select-menu-outer,#gs .Select-placeholder,#gs .Select-control{
@@ -348,3 +360,4 @@ grid-area: graph;
   box-shadow: inset 0 0 3px 1px rgba(81, 203, 238, 1); 
   outline: none; 
 }
+
