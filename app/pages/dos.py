@@ -12,7 +12,6 @@ from functools import lru_cache
 from .re_usable import graph_config,lm_select,get_switch, load_vasprun, json_to_evr
 import json
 import numpy as np
-from matplotlib.pyplot import cm
  
 
 layout = html.Div([
@@ -55,6 +54,4 @@ def render_graph(value,on,lm,fig):
         evr_to_graph = json_to_evr(value)
         fields = np.array(evr_to_graph.sys_info.fields)
         labels= fields[lm]
-        #colors = cm.gist_rainbow(np.linspace(0,1,len(lm)))
-        #colors = cm.rainbow(np.linspace(0,1,len(lm)))
         return pp.plotly_dos_lines(evr_to_graph,orbs=lm,orblabels=labels)
