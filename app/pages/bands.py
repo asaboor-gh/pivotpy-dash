@@ -6,20 +6,19 @@ import time
 import numpy as np 
 import dash
 from dash.dash import no_update
-from .re_usable import graph_config, lm_select, get_switch, load_vasprun, json_to_evr
+from .re_usable import graph_config, lm_select, get_switch, load_vasprun, json_to_evr, get_dbc_switch
 import plotly.graph_objs as go
 from dash.exceptions import PreventUpdate
 from functools import lru_cache
 import pivotpy as pp
 import json
 import dash_daq as daq
-import dash_bootstrap_components as dbc 
 
 
 
 layout = html.Div([
     html.Div([
-        get_switch('run-calc','Load-Data'),
+        get_dbc_switch('run-calc','Load-Data'),
         dcc.Loading(className='CenHeader',children=html.Div(id='hidden-div',hidden=True),type='dot')
     ],style={"display":"flex","padding":"20px 0px","align-items": "flex-start"}),
     html.Div(id='d-out',children=[
@@ -28,15 +27,17 @@ layout = html.Div([
         lm_select('blue','Blue Orbital(s)','blue')
         ],style={'display':'flex',"padding":"20px 10px","align-items": "flex-start"}),
     
-    get_switch('switch-graph','Update Graph'),
+    get_dbc_switch('switch-graph','Update Graph'),
+    html.Div([
     dcc.Loading(className='loading',id='d-g',children=dcc.Graph(id='bands-graph',config=graph_config)),
+    ],style={'height':'30vh','width':'50vw'})
 ])
 
 
     
 @app.callback([Output('hidden-div','children'),
                Output('red','options'),Output('green','options'),Output('blue','options')],
-              [Input('dd','value'),Input('run-calc','on')],
+              [Input('dd','value'),Input('run-calc','value')],
               [State('hidden-div','children'),State('red','options')])
 def return_bands(file,on,child,options):
     if not on:
@@ -58,7 +59,7 @@ def return_bands(file,on,child,options):
             
 
   
-@app.callback(Output('bands-graph','figure'),[Input('hidden-div','children'),Input('switch-graph','on')],[State('bands-graph','figure')])
+@app.callback(Output('bands-graph','figure'),[Input('hidden-div','children'),Input('switch-graph','value')],[State('bands-graph','figure')])
 def render_graph(value,on,fig):
     if not on:
         raise PreventUpdate

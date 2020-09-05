@@ -1,10 +1,12 @@
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_bootstrap_components as dbc
 import dash_daq as daq
 from dash.exceptions import PreventUpdate
 import json 
 import pivotpy as pp
 from functools import lru_cache
+
 # Graph configuration.
 graph_config = {'responsive':True,
                 'editable':True,
@@ -29,7 +31,10 @@ def get_switch(id='my-switch',label='Select It',on=False):
         html.Div([daq.BooleanSwitch(id=id,on=on,color="#1f2c56",className='CenHeader')]),
         html.Div([html.H6(label,className='CenHeader',style={"padding":"0px 10px"})])
         ],style={"display":"inline-flex","padding":"20px 20px","align-items": "left"})
-    
+def get_dbc_switch(id='my-switch',label='Select It'):
+    return dbc.Checklist(options=[{"label": label, "value": 1}],
+            value=[],id=id,switch=True)
+
 # Data functions
 @lru_cache(maxsize=2)
 def load_vasprun(path):

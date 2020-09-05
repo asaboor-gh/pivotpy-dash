@@ -103,12 +103,12 @@ button:active {
   }
 
 .Navigation{
-  position:fixed;
+  position:absolute;
   z-index:99999;
   left:0px;
   right:0px;
-  top:0px;
-  height: 50px;
+  /*top:0px;
+  height: 50px;*/
   display:inline-grid;
   grid-template-columns: 1fr 3fr;
   width:100%; 
@@ -121,12 +121,12 @@ button:active {
   white-space: nowrap;
 }
 .AppHeader{
-  position:fixed;
+  position:absolute;
   z-index:99999;
   left:0px;
   right:0px;
-  top:50px;
-  height: 50px;
+  /*top:50px;
+  height: 50px;*/
   display:inline-grid;
   grid-template-columns: 2fr 17fr 3fr;
   width:100%; 
@@ -234,9 +234,9 @@ td {
 }
 .progress {
   position: fixed;
-  height:3px;
-  top:100px;
-  z-index:9999;
+  height:4px;
+  bottom:0;
+  z-index: 50;
   background:#1f2c56;
 }
 .content {
@@ -263,9 +263,9 @@ td {
   .AppHeader {
     top:100px
   }
-  .progress {
+ /* .progress {
     top: 150px;
-  }
+  }*/
   .content {
     position: absolute;
     top:160px;

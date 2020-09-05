@@ -7,6 +7,7 @@ import pivotpy as pp
 from app import app
 from pages import bands, dos, home, fermi, input, locpot
 from pages.re_usable import graph_config
+import dash_bootstrap_components as dbc
 
 #path = os.getcwd()
 #items = pp.get_child_items(path=path,include=[],dirsOnly=True)
@@ -38,8 +39,9 @@ header.children.append(
     html.Div(className='CenHeader',children=html.H6('Path'))
     )
 # This dropdown is updated through Home.
+
 header.children.append(
-   html.Div(id='page-content',children=dcc.Dropdown(id='dd',clearable=False,persistence=True)) 
+   html.Div(id='page-content',children=[dcc.Dropdown(id='dd',clearable=False,persistence=True)]) 
     )
 header.children.append(html.Div(className='CenHeader',id="counting",children=[html.H6('')]))
 
@@ -122,7 +124,7 @@ def display_page(pathname):
     elif pathname == '/pages/fermi':
         return fermi.layout,inactive_style,inactive_style,inactive_style,active_style,inactive_style,inactive_style
     elif pathname == '/pages/locpot':
-        return input.layout,inactive_style,inactive_style,inactive_style,inactive_style,active_style,inactive_style
+        return locpot.layout,inactive_style,inactive_style,inactive_style,inactive_style,active_style,inactive_style
     elif pathname == '/pages/input':
         return input.layout,inactive_style,inactive_style,inactive_style,inactive_style,inactive_style, active_style
     
