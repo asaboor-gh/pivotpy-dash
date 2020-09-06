@@ -45,10 +45,6 @@ section:nth-child(3) {
 
 
 button {
-  width: 50px;
-  height: 100vh;
-  padding-bottom: 100px;
-  z-index: 9999;
   border: none;
   padding: 0 0;
   margin: none;
@@ -60,6 +56,7 @@ button {
   cursor: pointer;
   text-align: center;
   text-justify: auto;
+  vertical-align: middle;
   transition: background 250ms ease-in-out, 
               transform 150ms ease;
   -webkit-appearance: none;
@@ -75,23 +72,29 @@ button:active {
   transform: scale(0.5);
 }
 
+.prev .next {
+  width: 50px;
+  z-index: 9999;
+  height: 20vh;
+  top:40vh;
+  padding-bottom: 200px;
+}
 .btn-simple{
   height: 40px;
   width:auto;
-  z-index: 0;
+  z-index: inherit;
   border: 1px solid black;
   border-radius: 20px;
-  padding: 0 10px;
-  padding-bottom: 5px;
-  margin: none;
+  padding: 0 5px 5px 5px; /* important for center align*/
   text-decoration: none;
   background: #1f2c56;
   color: white;
   font-family: sans-serif;
-  font-size: medium;
+  font-size: 1rem;
   white-space: nowrap;
   cursor: pointer;
   text-align: center;
+  vertical-align: middle;
   text-justify: auto;
   transition: background 250ms ease-in-out, 
               transform 150ms ease;

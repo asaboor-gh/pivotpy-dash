@@ -48,9 +48,9 @@ progressbar = html.Div(id='progressbar',className="progress",children=html.Div(
                         style={"width":"100vw","left":"0px","right":"0px"}
                         )
                     )
-
-prev_t=html.Button(id='prev-btn',n_clicks=0, className="prev",style={"position": "fixed", "left": "0px", "top": "0px"},children=u'\u2039') #u'\u2b9c'+
-next_t=html.Button(id='next-btn',n_clicks=0,className="next",style={"position": "fixed", "right": "0px", "top": "0px"},children=u'\u203a') #u'\u2b9e'+
+btn_pos = {"position":"fixed","height": "20vh","top":"40vh","padding-bottom": "200px"}
+prev_t=html.Button(id='prev-btn',n_clicks=0, className="prev",style={"left": "0px",**btn_pos},children=u'\u2039') #u'\u2b9c'+
+next_t=html.Button(id='next-btn',n_clicks=0,className="next",style={"right": "0px",**btn_pos},children=u'\u203a') #u'\u2b9e'+
 
 
 app.layout = html.Div([
