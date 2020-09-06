@@ -60,13 +60,16 @@ app.layout = html.Div([
                ),
     dbc.Collapse([
         dbc.Navbar([
-            html.H3('Pivotpy-Dash'),header,navigation
+            html.H3('Pivotpy-Dash'),
+            header,
+            navigation
             ],className='my-navbar',color=COLOR_NAV,
             style={"top":"0px","height":"{}px".format(TOP_NAV)}
             ),
         ],id="navbar-collapse",is_open=True),
     html.Div(id = 'display-page',className='content',children=[],
-             style={"top":"0px"}),
+             style={"top":"0px"}
+             ),
     progressbar,
     prev_t,
     next_t,
