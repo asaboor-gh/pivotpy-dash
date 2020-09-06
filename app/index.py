@@ -9,15 +9,13 @@ from pages import bands, dos, home, fermi, input, locpot
 from pages.re_usable import graph_config
 import dash_bootstrap_components as dbc
 
-#path = os.getcwd()
-#items = pp.get_child_items(path=path,include=[],dirsOnly=True)
-#items_labels = items.children
-#items_values = [os.path.join(items.parent,child) for child in items.children]
+TOP_NAV = 142   # height and top of content. Important inline style
+COLOR_NAV = 'whitesmoke' #'#bdc4d8' # Navbar color
 active_style   = {"color":  "#1f2c56","font-weight": "bold", "border-bottom": "3px solid  #1f2c56"}
 inactive_style = {"float": "left","color": "blue", "text-align": "center",
-  "padding": "0", "text-decoration": "none", "font-size": "1em",
-  "box-shadow": "inset 0 -2px 0 0 #f9fdfcee"}
-navigation = html.Div(className='Navigation',children=[html.H3('Pivotpy-Dash')])
+                  "padding": "0", "text-decoration": "none", "font-size": "1em",
+                  "box-shadow": "inset 0 -2px 0 0 #f9fdfcee"}
+navigation = html.Div(className='Navigation',children=[])
 menu_items = [
             html.Div([dcc.Link('Home',className='CenHeader', href='/pages/home')],id='home'),
             html.Div([dcc.Link('Bands',className='CenHeader', href='/pages/bands')],id='bands'),
@@ -31,7 +29,7 @@ navigation.children.append(
         [
     html.Div(
             menu_items,
-        className='navbar')
+        className='topnavbar')
         ])
     )
 header = html.Div(className='AppHeader',id="app-header",children=[])
@@ -56,17 +54,44 @@ next_t=html.Button(id='next-btn',n_clicks=0,className="next",style={"position": 
 
 
 app.layout = html.Div([
-                        dcc.Location(id='url', refresh=False),navigation,
-                        header,
-                        progressbar,
-                        prev_t,
-                        next_t,
-                        html.Div(id = 'display-page',className='content',children=[])
-                    ])
+    dcc.Location(id='url', refresh=False),
+    dbc.Button('≡',id="navbar-toggler",className='btn-simple',
+               style={"width":"40px","height":"40px","border-radius":"20px","z-index":"99999999","position":"fixed","top":"10px","right":"10px"}
+               ),
+    dbc.Collapse([
+        dbc.Navbar([
+            html.H3('Pivotpy-Dash'),header,navigation
+            ],className='my-navbar',color=COLOR_NAV,
+            style={"top":"0px","height":"{}px".format(TOP_NAV)}
+            ),
+        ],id="navbar-collapse",is_open=True),
+    html.Div(id = 'display-page',className='content',children=[],
+             style={"top":"0px"}),
+    progressbar,
+    prev_t,
+    next_t,
+    ])
+
+# add callback for toggling the collapse on small screens
+@app.callback(
+    [Output("navbar-collapse", "is_open"),
+     Output('display-page','style')],
+    [Input("navbar-toggler", "n_clicks")],
+    [State("navbar-collapse", "is_open"),
+     State("display-page", "style")],
+)
+def toggle_navbar_collapse(n, is_open,style):
+    current_value = float(style["top"].split('p')[0])
+    top = {"top":"{}px".format(abs(TOP_NAV-current_value))}
+    if n:
+        return not is_open,top
+    return is_open,top
 
 # Changing values with button
-@app.callback([Output('counting','children'),Output('progressbar','children')],
-              [Input('dd','value'),Input('dd','options')])
+@app.callback([Output('counting','children'),
+               Output('progressbar','children')],
+              [Input('dd','value'),
+               Input('dd','options')])
 def update_count(value,options):
     if options != None:
         values = [opt['value'] for opt in options]
@@ -78,7 +103,9 @@ def update_count(value,options):
     
 # Changing directories
 @app.callback(Output('dd','value'),
-              [Input('next-btn', 'n_clicks'),Input('prev-btn', 'n_clicks'),Input('dd','options')],
+              [Input('next-btn', 'n_clicks'),
+               Input('prev-btn', 'n_clicks'),
+               Input('dd','options')],
               [State('dd','value')])
 def update_file_index(next,prev,options,value):
     if options != None:
@@ -116,17 +143,59 @@ def update_file_index(next,prev,options,value):
               [Input('url', 'pathname')])
 def display_page(pathname):
     if pathname == '/pages/home' or pathname == '/':
-        return home.layout,active_style,inactive_style,inactive_style,inactive_style,inactive_style,inactive_style
+        return (home.layout,
+                active_style,
+                inactive_style,
+                inactive_style,
+                inactive_style,
+                inactive_style,
+                inactive_style
+                )
     elif pathname == '/pages/bands':
-        return bands.layout,inactive_style,active_style,inactive_style,inactive_style,inactive_style, inactive_style
+        return (bands.layout,
+                inactive_style,
+                active_style,
+                inactive_style,
+                inactive_style,
+                inactive_style, 
+                inactive_style
+                )
     elif pathname == '/pages/dos':
-        return dos.layout, inactive_style,inactive_style,active_style,inactive_style,inactive_style, inactive_style
+        return (dos.layout, 
+                inactive_style,
+                inactive_style,
+                active_style,
+                inactive_style,
+                inactive_style, 
+                inactive_style
+                )
     elif pathname == '/pages/fermi':
-        return fermi.layout,inactive_style,inactive_style,inactive_style,active_style,inactive_style,inactive_style
+        return (fermi.layout,
+                inactive_style,
+                inactive_style,
+                inactive_style,
+                active_style,
+                inactive_style,
+                inactive_style
+                )
     elif pathname == '/pages/locpot':
-        return locpot.layout,inactive_style,inactive_style,inactive_style,inactive_style,active_style,inactive_style
+        return (locpot.layout,
+                inactive_style,
+                inactive_style,
+                inactive_style,
+                inactive_style,
+                active_style,
+                inactive_style
+                )
     elif pathname == '/pages/input':
-        return input.layout,inactive_style,inactive_style,inactive_style,inactive_style,inactive_style, active_style
+        return (input.layout,
+                inactive_style,
+                inactive_style,
+                inactive_style,
+                inactive_style,
+                inactive_style, 
+                active_style
+                )
     
 if len(sys.argv) > 1:
     port = sys.argv[1]

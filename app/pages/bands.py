@@ -30,7 +30,7 @@ layout = html.Div([
     get_dbc_switch('switch-graph','Update Graph'),
     html.Div([
     dcc.Loading(className='loading',id='d-g',children=dcc.Graph(id='bands-graph',config=graph_config)),
-    ],style={'height':'30vh','width':'50vw'})
+    ])
 ])
 
 
@@ -50,7 +50,7 @@ def return_bands(file,on,child,options):
         json_str = json.dumps(evr,cls=pp.EncodeFromNumpy)
         fields = np.array(evr.sys_info.fields)
         print(time.time()-start)
-        print(evr.keys())
+        print('bands',evr.keys())
         if len(fields) != len(options):
             re_opts = [{'label':l,'value':i} for i,l in enumerate(fields)]
             return (json_str,re_opts,re_opts,re_opts)

@@ -60,6 +60,9 @@ html {
 article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
   display: block;
 }
+nav::backdrop{
+  display: none;
+}
 
 body {
   margin: 0;
@@ -4730,6 +4733,7 @@ input[type="button"].btn-block {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+          
 }
 
 .navbar-toggler {

@@ -7,12 +7,12 @@ from dash.dash import no_update
 from app import app
 import pivotpy as pp
 
-input_ = dcc.Input(id='input_field',value=os.getcwd(),debounce=True,persistence=True)
-include_ = dcc.Input(id = 'include_field',value=None,type="text",debounce=True,persistence=True)
-exclude_ = dcc.Input(id = 'exclude_field',value=None,type="text",debounce=True,persistence=True)
+input_     = dcc.Input(id='input_field',value=os.getcwd(),debounce=True,persistence=True)
+include_   = dcc.Input(id = 'include_field',value=None,type="text",debounce=True,persistence=True)
+exclude_   = dcc.Input(id = 'exclude_field',value=None,type="text",debounce=True,persistence=True)
 selection_ = dcc.Dropdown(id='file_radio',options=[{'label':i,'value':i} for i in ['Files','Folders','Both']],value='Both',clearable=False,persistence=True)
-depth_ = dcc.Dropdown(id='dirs_depth',options=[{'label':str(i),'value':i} for i in [1,2,3,4,5,'Max']],value=4,clearable=False,persistence=True)
-intro_str = "Thank you for using Pivotpy-Dash!"
+depth_     = dcc.Dropdown(id='dirs_depth',options=[{'label':str(i),'value':i} for i in [1,2,3,4,5,'Max']],value=4,clearable=False,persistence=True)
+intro_str  = "Thank you for using Pivotpy-Dash!"
 
 layout = html.Div([
     dcc.Markdown("""

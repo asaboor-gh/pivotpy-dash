@@ -39,7 +39,7 @@ def return_dos(file,on,child,options):
         json_str = json.dumps(evr,cls=pp.EncodeFromNumpy)
         fields = np.array(evr.sys_info.fields)
         print(time()-start)
-        print(evr.keys())
+        print('dos',evr.keys())
         if len(fields) != len(options):
             re_opts = [{'label':l,'value':i} for i,l in enumerate(fields)]
             return (json_str,re_opts)

@@ -103,42 +103,37 @@ button:active {
   }
 
 .Navigation{
-  position:absolute;
-  z-index:99999;
+  position: relative;
+  z-index:9999;
   left:0px;
   right:0px;
-  /*top:0px;
-  height: 50px;*/
-  display:inline-grid;
-  grid-template-columns: 1fr 3fr;
-  width:100%; 
+  /*display:inline-grid;
+  grid-template-columns: 1fr 3fr;*/
+  width:100vw; 
   padding: 5px 5px 5px 5px;
   grid-gap:10px;
-  background:#ccc;
   align-items: left;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
 }
 .AppHeader{
-  position:absolute;
+  position: relative;
   z-index:99999;
   left:0px;
   right:0px;
-  /*top:50px;
-  height: 50px;*/
   display:inline-grid;
-  grid-template-columns: 2fr 17fr 3fr;
-  width:100%; 
+  grid-template-columns: 2em auto max-content 1em; /* Last 1em is to fix an issue*/
+  width:100vw; 
   padding: 5px 5px 5px 5px;
   grid-gap:10px;
-  background:  #ccc;
-  align-items: stretch;
+  align-items: flex-start;
 }
 .CenHeader{
   margin: auto;
   text-align: center;
   white-space: nowrap;
+  border:none;
 }
 .CenHeader p{
   margin: auto;
@@ -241,7 +236,6 @@ td {
 }
 .content {
   position: absolute;
-  top:106px;
   left:50px;
   right:50px;
 }
@@ -258,17 +252,9 @@ td {
     color:  #1f2c56;
     display: block;
     align-items: center;
-    height: 100px;
   }
-  .AppHeader {
-    top:100px
-  }
- /* .progress {
-    top: 150px;
-  }*/
   .content {
     position: absolute;
-    top:160px;
     left:50px;
     right:50px;
   }
@@ -301,17 +287,21 @@ grid-area: graph;
 }
 
 
-.navbar {
+.topnavbar {
   display: inline-flex;
   align-content: flex-start;
   margin: auto;
-  box-shadow: inset 0 -3px 0 0 #f9fdfcee;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
 }
 
-.navbar a {
+.topnavbar > div:hover{
+  border-bottom: 1px solid #f9fdfcee;
+}
+
+
+.topnavbar a {
   float: left;
   display: block;
   color:inherit;
@@ -319,12 +309,13 @@ grid-area: graph;
   padding: 5px 20px;
   text-decoration: none;
   font-size: 1em;
-  border-bottom: 3px solid transparent;
+  border: none;
 }
 
-.navbar a:hover {
-  color: white;
-  background-color: #1f2c564b;
+.topnavbar a:hover {
+  opacity: 0.5;
+  border-bottom:none;
+  box-shadow: none;
 }
 
 .flex-horizontal{
@@ -361,3 +352,11 @@ grid-area: graph;
   outline: none; 
 }
 
+.my-navbar {
+  position: fixed;
+  display: block;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: 999999;
+}
