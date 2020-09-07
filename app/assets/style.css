@@ -1,8 +1,14 @@
 @import url('https://kodhus.com/kodhus-ui/kodhus-0.1.0.min.css');
+/*@font-face {
+  font-family: MyFont;
+  /*src: url(sansation_light.woff);
+  src: url(STIX2Text-Regular.otf)
+}
+*/
 body {
   margin: 0;
   background: #f9fdfcee;
-  font-family: serif, Arial, Helvetica;
+  font-family: serif, Arial, Helvetica; 
 }
 section {
   height: 100vh;
@@ -85,7 +91,7 @@ button:active {
   z-index: inherit;
   border: 1px solid black;
   border-radius: 20px;
-  padding: 0 5px 5px 5px; /* important for center align*/
+  padding: 0 5px 0 5px; /* important for center align*/
   text-decoration: none;
   background: #1f2c56;
   color: white;
@@ -94,7 +100,7 @@ button:active {
   white-space: nowrap;
   cursor: pointer;
   text-align: center;
-  vertical-align: middle;
+  /*vertical-align: middle;*/
   text-justify: auto;
   transition: background 250ms ease-in-out, 
               transform 150ms ease;
@@ -126,7 +132,7 @@ button:active {
   left:0px;
   right:0px;
   display:inline-grid;
-  grid-template-columns: 2em auto max-content 1em; /* Last 1em is to fix an issue*/
+  grid-template-columns: 3em auto max-content 1em; /* Last 1em is to fix an issue*/
   width:100vw; 
   padding: 5px 5px 5px 5px;
   grid-gap:10px;
@@ -313,12 +319,11 @@ grid-area: graph;
   text-decoration: none;
   font-size: 1em;
   border: none;
+  font-weight: inherit;
 }
 
 .topnavbar a:hover {
   opacity: 0.5;
-  border-bottom:none;
-  box-shadow: none;
 }
 
 .flex-horizontal{

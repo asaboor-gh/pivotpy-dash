@@ -10,26 +10,46 @@ from pages.re_usable import graph_config
 import dash_bootstrap_components as dbc
 
 TOP_NAV = 142   # height and top of content. Important inline style
-COLOR_NAV = 'whitesmoke' #'#bdc4d8' # Navbar color
+COLOR_NAV = 'skyblue' #'#bdc4d8' # Navbar color
 active_style   = {"color":  "#1f2c56","font-weight": "bold", "border-bottom": "3px solid  #1f2c56"}
 inactive_style = {"float": "left","color": "blue", "text-align": "center",
-                  "padding": "0", "text-decoration": "none", "font-size": "1em",
+                  "padding": "0", "text-decoration": "none", "font-size": "1em", "font-weight": "normal",
                   "box-shadow": "inset 0 -2px 0 0 #f9fdfcee"}
+# PAGES_INDEX and PAGES_PATH should be in same order and no trailing slash
+PAGES_INDEX = {
+    'home'  : [0,home.layout],
+    'bands' : [1,bands.layout],
+    'dos'   : [2,dos.layout],
+    'fermi' : [3,fermi.layout],
+    'locpot': [4,locpot.layout],
+    'input' : [5,input.layout]
+}
+PAGES_PATH = [
+    '/pages/home',
+    '/pages/bands',
+    '/pages/dos',
+    '/pages/fermi',
+    '/pages/locpot',
+    '/pages/input'
+]
+
+
 navigation = html.Div(className='Navigation',children=[])
+# style is mendatory key in menu_items
 menu_items = [
-            html.Div([dcc.Link('Home',className='CenHeader', href='/pages/home')],id='home'),
-            html.Div([dcc.Link('Bands',className='CenHeader', href='/pages/bands')],id='bands'),
-            html.Div([dcc.Link('DOS',className='CenHeader', href='/pages/dos')],id='dos'),
-            html.Div([dcc.Link('Fermi Surface',className='CenHeader', href='/pages/fermi')],id='fermi'),
-            html.Div([dcc.Link('LOCPOT',className='CenHeader', href='/pages/locpot')],id='locpot'),
-            html.Div([dcc.Link('Input',className='CenHeader', href='/pages/input')],id='input')
+            html.Div([dcc.Link('Home',className='CenHeader', href='/pages/home')],id='home',style={}),
+            html.Div([dcc.Link('Bands',className='CenHeader', href='/pages/bands')],id='bands',style={}),
+            html.Div([dcc.Link('DOS',className='CenHeader', href='/pages/dos')],id='dos',style={}),
+            html.Div([dcc.Link('Fermi Surface',className='CenHeader', href='/pages/fermi')],id='fermi',style={}),
+            html.Div([dcc.Link('LOCPOT',className='CenHeader', href='/pages/locpot')],id='locpot',style={}),
+            html.Div([dcc.Link('Input',className='CenHeader', href='/pages/input')],id='input',style={})
             ]
 navigation.children.append(
     html.Div(
         [
     html.Div(
             menu_items,
-        className='topnavbar')
+        className='topnavbar',id='menu')
         ])
     )
 header = html.Div(className='AppHeader',id="app-header",children=[])
@@ -48,7 +68,7 @@ progressbar = html.Div(id='progressbar',className="progress",children=html.Div(
                         style={"width":"100vw","left":"0px","right":"0px"}
                         )
                     )
-btn_pos = {"position":"fixed","height": "20vh","top":"40vh","padding-bottom": "200px"}
+btn_pos = {"position":"fixed","height": "20vh","top":"40vh","padding-bottom": "0px"}
 prev_t=html.Button(id='prev-btn',n_clicks=0, className="prev",style={"left": "0px",**btn_pos},children=u'\u2039') #u'\u2b9c'+
 next_t=html.Button(id='next-btn',n_clicks=0,className="next",style={"right": "0px",**btn_pos},children=u'\u203a') #u'\u2b9e'+
 
@@ -137,68 +157,22 @@ def update_file_index(next,prev,options,value):
 
 #Serve pages
 @app.callback([Output('display-page', 'children'),
-               Output('home','style'),
-               Output('bands','style'),
-               Output('dos','style'),
-               Output('fermi','style'),
-               Output('locpot','style'),
-               Output('input','style')],
-              [Input('url', 'pathname')])
-def display_page(pathname):
-    if pathname == '/pages/home' or pathname == '/':
-        return (home.layout,
-                active_style,
-                inactive_style,
-                inactive_style,
-                inactive_style,
-                inactive_style,
-                inactive_style
-                )
-    elif pathname == '/pages/bands':
-        return (bands.layout,
-                inactive_style,
-                active_style,
-                inactive_style,
-                inactive_style,
-                inactive_style, 
-                inactive_style
-                )
-    elif pathname == '/pages/dos':
-        return (dos.layout, 
-                inactive_style,
-                inactive_style,
-                active_style,
-                inactive_style,
-                inactive_style, 
-                inactive_style
-                )
-    elif pathname == '/pages/fermi':
-        return (fermi.layout,
-                inactive_style,
-                inactive_style,
-                inactive_style,
-                active_style,
-                inactive_style,
-                inactive_style
-                )
-    elif pathname == '/pages/locpot':
-        return (locpot.layout,
-                inactive_style,
-                inactive_style,
-                inactive_style,
-                inactive_style,
-                active_style,
-                inactive_style
-                )
-    elif pathname == '/pages/input':
-        return (input.layout,
-                inactive_style,
-                inactive_style,
-                inactive_style,
-                inactive_style,
-                inactive_style, 
-                active_style
-                )
+               Output('menu','children')],
+              [Input('url', 'pathname')],
+              [State('menu','children')])
+def display_page(pathname,children):
+    # Change all children's style to inactive, then change individual to active
+    for i in range(len(children)):
+        children[i]['props']['style'] = inactive_style
+    if pathname == '/':
+        children[PAGES_INDEX['home'][0]]['props']['style'] = active_style
+        return home.layout,children
+    elif pathname in PAGES_PATH:
+        _path = pathname.split('/')[-1]
+        children[PAGES_INDEX[_path][0]]['props']['style'] = active_style
+        return PAGES_INDEX[_path][1], children
+    else:
+        return '404'
     
 if len(sys.argv) > 1:
     port = sys.argv[1]

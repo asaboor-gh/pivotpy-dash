@@ -2,7 +2,6 @@ import dash_html_components as html
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 from app import app
-from . import bands, dos, home, fermi, locpot
 from dash.dependencies import Input, Output, State
 #content = html.Div([
 #    html.Div([html.H3('Pivotpy-Dash'),   
@@ -25,4 +24,6 @@ from dash.dependencies import Input, Output, State
 #    ],persistence=True)
 #    ]),
 #])
-layout = html.Div([])
+layout = html.Div([
+    html.I(className="fas fa-arrow-alt-circle-right")
+])
