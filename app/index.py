@@ -1,3 +1,5 @@
+import webbrowser
+from threading import Timer
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
@@ -179,7 +181,12 @@ if len(sys.argv) > 1:
 else:
     port = 8050
     
+def open_browser(port=port):
+    webbrowser.open_new_tab("http://127.0.0.1:{}/".format(port))
 
 #==========================
 if __name__ == '__main__':
+    # The reloader has not yet run - open the browser
+    if not os.environ.get("WERKZEUG_RUN_MAIN"):
+        Timer(1, open_browser).start();
     app.run_server(debug=True,port=port)

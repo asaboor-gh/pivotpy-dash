@@ -4,15 +4,11 @@ from dash.dependencies import Input, Output, State
 from app import app
 import time
 import numpy as np 
-import dash
 from dash.dash import no_update
-from .re_usable import graph_config, lm_select, get_switch, load_vasprun, json_to_evr, get_dbc_switch
-import plotly.graph_objs as go
+from .re_usable import graph_config, lm_select, json_to_evr, get_dbc_switch, load_vasprun
 from dash.exceptions import PreventUpdate
-from functools import lru_cache
 import pivotpy as pp
 import json
-import dash_daq as daq
 
 
 
@@ -45,12 +41,10 @@ def return_bands(file,on,child,options):
         return (child,options,options,options)
     else:
         start = time.time()
-        evr = load_vasprun(file)
-        evr.pop('xml',None) # remove xml object
-        json_str = json.dumps(evr,cls=pp.EncodeFromNumpy)
+        evr = pp.export_vasprun(file)
+        json_str = pp.dump_dict(evr,dump_to='json')
         fields = np.array(evr.sys_info.fields)
         print(time.time()-start)
-        print('bands',evr.keys())
         if len(fields) != len(options):
             re_opts = [{'label':l,'value':i} for i,l in enumerate(fields)]
             return (json_str,re_opts,re_opts,re_opts)
@@ -64,7 +58,7 @@ def render_graph(value,on,fig):
     if not on:
         raise PreventUpdate
     else:
-        evr_to_fig = json_to_evr(value)
+        evr_to_fig = pp.load_from_dump(value)
         return pp.plotly_rgb_lines(evr_to_fig)
 
 #Input('red','value'),Input('green','value'),Input('blue','value')

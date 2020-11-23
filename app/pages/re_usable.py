@@ -45,4 +45,4 @@ def json_to_evr(json_obj):
     if json_obj == None:
         raise PreventUpdate
     _out_evr =  json.loads(json_obj,cls=pp.DecodeToNumpy)
-    return pp.make_dot_dict(_out_evr)
+    return pp.Dict2Data(_out_evr)
